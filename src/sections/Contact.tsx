@@ -25,8 +25,11 @@ export function Contact() {
   if (!contactConfig.formHeadline) return null;
 
   useEffect(() => {
-    // initialize EmailJS with your public key
-    emailjs.init('X6VzaYLSuLrBDAZL1');
+    // initialize EmailJS with your public key from environment variables
+    const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
+    if (publicKey) {
+      emailjs.init(publicKey);
+    }
 
     const ctx = gsap.context(() => {
       // Header — slide up
@@ -94,12 +97,16 @@ export function Contact() {
       time: new Date().toLocaleString('fr-FR'),
     };
 
+    const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID;
+    const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
+    const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
+
     emailjs
       .send(
-        'service_oz4wgt8',          // your service ID
-        'template_86gr9d9',          // your template ID
+        serviceId,          // your service ID
+        templateId,         // your template ID
         templateParams,
-        'X6VzaYLSuLrBDAZL1'         // your public key
+        publicKey           // your public key
       )
       .then(
         () => {
